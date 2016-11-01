@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DynMetID</class>
+ <widget class="QWidget" name="DynMetID">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>946</width>
+    <height>925</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dynamic Metabolite Identifier</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <item row="0" column="0" colspan="2">
+    <layout class="QGridLayout" name="gridLayout_9">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="openMetabolstButton">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Open metabolite list</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="minimumSize">
+        <size>
+         <width>396</width>
+         <height>21</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="openDBButton">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>150</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Open DB</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_2">
+       <property name="minimumSize">
+        <size>
+         <width>396</width>
+         <height>21</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="2">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>348</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="msBox">
+     <property name="minimumSize">
+      <size>
+       <width>262</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>262</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Mass filtering</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Mass error</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="masserrorSpinBox">
+          <property name="maximum">
+           <double>9999.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>ppm</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Adducts</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" rowspan="3">
+       <widget class="QListView" name="listView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="addAdductButton">
+        <property name="minimumSize">
+         <size>
+          <width>51</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>51</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="RemoveAdductsButton">
+        <property name="minimumSize">
+         <size>
+          <width>51</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>51</width>
+          <height>41</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>46</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="1" rowspan="2" colspan="2">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Identification table</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="identifyButton">
+        <property name="text">
+         <string>Identify</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QTableView" name="tableView">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="rtBox">
+     <property name="minimumSize">
+      <size>
+       <width>245</width>
+       <height>314</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>262</width>
+       <height>362</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Retention time filtering</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>retention error</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" rowspan="7">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="rterrorSpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="value">
+           <double>2.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QDoubleSpinBox" name="t0SpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="maximum">
+           <double>999999999.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.969000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QDoubleSpinBox" name="dwellSpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="maximum">
+           <double>999999999.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.375000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QDoubleSpinBox" name="fluxSpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="decimals">
+           <number>3</number>
+          </property>
+          <property name="maximum">
+           <double>999999999.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.300000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QDoubleSpinBox" name="gstartSpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>5.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QDoubleSpinBox" name="gstopSpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>95.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QDoubleSpinBox" name="gtimeSpinBox">
+          <property name="maximumSize">
+           <size>
+            <width>62</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="maximum">
+           <double>999999999.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;t&lt;span style=&quot; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>min</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Dwell Vol.</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>ml</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>Flow rate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>ul/min</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Stop</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Gradient time</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="label_9">
+        <property name="maximumSize">
+         <size>
+          <width>21</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>min</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0" colspan="3">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0" colspan="3">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="opentrtuning">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Set rt align file</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="9" column="0" colspan="3">
+       <widget class="QLineEdit" name="lineEdit_3"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>325</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="progressBar">
+       <property name="value">
+        <number>24</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="aboutButton">
+       <property name="minimumSize">
+        <size>
+         <width>132</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>132</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>About</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="quitButton">
+       <property name="minimumSize">
+        <size>
+         <width>132</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>132</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Quit</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder>groupBox_3</zorder>
+  <zorder>label_3</zorder>
+  <zorder>horizontalSpacer_2</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
