@@ -10,11 +10,11 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QFileInfo>
-// if qt5 #include <QtConcurrent>
+#include <QtConcurrent>
 //#include <QDebug>
 
 #include "hmdbreader.h"
-#include "keggreader.h"
+#include "genericreader.h"
 #include "aboutdialog.h"
 
 void MetaSDFX::LoadSDF()
@@ -45,9 +45,9 @@ void MetaSDFX::LoadHMDBXML_Worker()
   }
 }
 
-void MetaSDFX::LoadKEGGCSV_Worker()
+void MetaSDFX::LoadGeneric_Worker()
 {
-  KEGGReader reader(ui.treeWidget, db);
+  GenericReader reader(ui.treeWidget, db);
   reader.readFile(ui.lineEdit_2->text());
   //Sort each node by tag name
   for(int i = 0; i < db->nodes.size(); i++){
@@ -66,7 +66,7 @@ void MetaSDFX::LoadDBFields()
   else{
     ui.progressBar->show();
     DisableButtons();
-    QFuture<void> future = QtConcurrent::run(this, &MetaSDFX::LoadKEGGCSV_Worker);
+    QFuture<void> future = QtConcurrent::run(this, &MetaSDFX::LoadGeneric_Worker);
     this->FutureWatcher.setFuture(future);
   }
 }
@@ -116,11 +116,11 @@ void MetaSDFX::OpenDBFile()
     ui.lineEdit_2->setText(xmldir);
   }
   else{
-    // KEGG CSV
+    // Generic CSV
     QString csvfile = QFileDialog::getOpenFileName(this,
                                                tr("Open File"),
                                                QDir::currentPath(),
-                                               tr("KEGG File (*.kegg)"),
+                                               tr("Generic File (*.ddb)"),
                                                0,
                                                QFileDialog::DontUseNativeDialog);
 

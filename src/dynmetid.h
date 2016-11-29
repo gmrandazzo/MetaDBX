@@ -1,5 +1,5 @@
-#ifndef METAIDENTIFY_H
-#define METAIDENTIFY_H
+#ifndef DYNMETID_H
+#define DYNMETID_H
 
 #include <QWidget>
 #include <QMessageBox>

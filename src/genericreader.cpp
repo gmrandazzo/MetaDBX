@@ -1,4 +1,4 @@
-#include "keggreader.h"
+#include "genericreader.h"
 #include <QFile>
 #include <QBytearray>
 #include <QTextStream>
@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
-QString KEGGReader::GetRandomString() const
+QString GenericReader::GetRandomString() const
 {
   const QString possibleCharacters("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
   const int randomStringLength = 5;
@@ -21,7 +21,7 @@ QString KEGGReader::GetRandomString() const
   return rndstr;
 }
 
-void KEGGReader::compress(const QString &infileName , const QString &outfileName)
+void GenericReader::compress(const QString &infileName , const QString &outfileName)
 {
   QFile infile(infileName);
   QFile outfile(outfileName);
@@ -34,7 +34,7 @@ void KEGGReader::compress(const QString &infileName , const QString &outfileName
   outfile.close();
 }
 
-void KEGGReader::uncompress(const QString &infileName, const QString &outfileName)
+void GenericReader::uncompress(const QString &infileName, const QString &outfileName)
 {
   QFile infile(infileName);
   QFile outfile(outfileName);
@@ -47,7 +47,7 @@ void KEGGReader::uncompress(const QString &infileName, const QString &outfileNam
   outfile.close();
 }
 
-bool KEGGReader::readFile(const QString &fileName)
+bool GenericReader::readFile(const QString &fileName)
 {
   QString tmpfname = GetRandomString();
   uncompress(fileName, tmpfname);
@@ -67,7 +67,7 @@ bool KEGGReader::readFile(const QString &fileName)
     QString line = in.readLine();
     QStringList  fields = line.split(";");
     // fields:
-    // 0: keggid
+    // 0: compoundid
     // 1: molname
     // 2: pathways
     // 3: cass number
@@ -77,14 +77,14 @@ bool KEGGReader::readFile(const QString &fileName)
     for(int i = 0; i < pathwayslst.size(); i++){
       int node_indx = (*db).nodes[0].indexOfTag(pathwayslst[i]);
       if(node_indx > -1){ // node found
-        if((*db).nodes[0].content[node_indx].GetIndexOfByMOLID(fields[0]) == -1){ // keggid not in list
+        if((*db).nodes[0].content[node_indx].GetIndexOfByMOLID(fields[0]) == -1){ // compoundid not in list
           (*db).nodes[0].content[node_indx].append(fields[0], fields[1]);
         }
         else{
           continue;
         }
       }
-      else{ // node not found neither keggid, name in list
+      else{ // node not found neither compoundid, name in list
         (*db).nodes[0].appendTag(pathwayslst[i]);
         (*db).nodes[0].lastTagContent().append(fields[0], fields[1]);
       }
@@ -96,7 +96,7 @@ bool KEGGReader::readFile(const QString &fileName)
   return true;
 }
 
-KEGGReader::KEGGReader(QTreeWidget *tree, Tree *db_)
+GenericReader::GenericReader(QTreeWidget *tree, Tree *db_)
 {
   treeWidget = tree;
   db = db_;

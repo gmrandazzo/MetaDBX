@@ -1,5 +1,5 @@
-#ifndef KEGGREADER_H
-#define KEGGREADER_H
+#ifndef GENERICREADER_H
+#define GENERICREADER_H
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -7,10 +7,10 @@
 
 #include "database.h"
 
-class KEGGReader
+class GenericReader
 {
 public:
-    KEGGReader(QTreeWidget *tree, Tree *db_);
+    GenericReader(QTreeWidget *tree, Tree *db_);
     bool readFile(const QString &fileName);
 
 private:

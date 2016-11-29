@@ -48,7 +48,7 @@ private slots:
 
 private:
   void LoadHMDBXML_Worker();
-  void LoadKEGGCSV_Worker();
+  void LoadGeneric_Worker();
   bool CheckErrors();
   void Extract_Worker();
   void WriteSDF(QStringList sdf, QString outfile);

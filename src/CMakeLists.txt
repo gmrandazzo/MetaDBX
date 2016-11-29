@@ -1,38 +1,46 @@
-#set(metasdfx_icon_SRC icons/icons.qrc)
+#MetaSDFX
+set(metasdfx_icon_SRC icons/icons.qrc)
 set(metasdfx_SRC main_metasdfx.cpp
                 metasdfx.cpp
                 aboutdialog.cpp
                 hmdbreader.cpp
-                keggreader.cpp)
+                genericreader.cpp)
 
-set(metasdfx_H
-    metasdfx.h
-    aboutdialog.h
-    hmdbreader.h
-    keggreader.h
-    database.h)
+set(metasdfx_H metasdfx.h
+              aboutdialog.h
+              hmdbreader.h
+              genericreader.h
+              database.h)
 
 set(metasdfx_UIS metasdfx.ui aboutdialog.ui)
 
 
-set(dynmetid_SRC dymetdb.cpp dynmetid.cpp main_dynmetid.cpp aboutdialog.cpp)
-set(dynmetid_H dymetdb.h dynmetid.h aboutdialog.h)
+#DynMetID
+set(dynmetid_SRC dymetdb.cpp
+                 dynmetid.cpp
+                 aboutdialog.cpp
+                 main_dynmetid.cpp)
+
+set(dynmetid_H dymetdb.h
+              dynmetid.h
+              aboutdialog.h)
+
 set(dynmetid_UIS dynmetid.ui aboutdialog.ui)
 
-set(testdb_SRC testdb.cpp)
 set(testdynmetdb_SRC test_dymetdb.cpp dymetdb.cpp)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 #set(icon_RCC icons/icons.qrc)
 # start building interface from moc
-QT4_WRAP_CPP(metasdfx_MOC_H ${metasdfx_H})
-QT4_WRAP_UI(metasdfx_UIS_H ${metasdfx_UIS})
+QT5_WRAP_CPP(metasdfx_MOC_H ${metasdfx_H})
+QT5_WRAP_UI(metasdfx_UIS_H ${metasdfx_UIS})
 
-QT4_WRAP_CPP(dynmetid_MOC_H ${dynmetid_H})
-QT4_WRAP_UI(dynmetid_UIS_H ${dynmetid_UIS})
+QT5_WRAP_CPP(dynmetid_MOC_H ${dynmetid_H})
+QT5_WRAP_UI(dynmetid_UIS_H ${dynmetid_UIS})
 
 # generate rules for building source files from the resources
-#QT4_ADD_RESOURCES(icon_RCC_SRCS ${icon_RCC})
+#QT5_ADD_RESOURCES(icon_RCC_SRCS ${icon_RCC})
 
 source_group("Resources" FILES ${metasdfx_UIS} ${dynmetid_UIS})
 source_group("Generated" FILES ${metasdfx_UIS_H} ${metasdfx_MOC_H} ${dynmetid_UIS_H} ${dynmetid_MOC_H})
@@ -51,7 +59,6 @@ if(WIN32)
   endif()
 endif()
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 if(WIN32)
   add_executable(metasdfx ${metasdfx_SRC} ${metasdfx_MOC_H} ${metasdfx_UIS_H} ${icon_RCC_SRCS} ${METASDFX_WIN32_ICON_O})
@@ -61,11 +68,10 @@ else(WIN32)
   add_executable(dynmetid ${dynmetid_SRC} ${dynmetid_MOC_H} ${dynmetid_UIS_H} ${icon_RCC_SRCS})
 endif(WIN32)
 
-#add_executable(testdb ${testdb_SRC})
 add_executable(testdynmetdb ${testdynmetdb_SRC})
 target_link_libraries(testdynmetdb m)
 
-target_link_libraries(metasdfx ${QT_LIBRARIES})
-target_link_libraries(dynmetid ${QT_LIBRARIES})
+target_link_libraries(metasdfx ${QT5_LIBRARIES})
+target_link_libraries(dynmetid ${QT5_LIBRARIES})
 install(TARGETS metasdfx DESTINATION bin COMPONENT ApplicationData)
 install(TARGETS dynmetid DESTINATION bin COMPONENT ApplicationData)

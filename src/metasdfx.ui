@@ -87,7 +87,7 @@
        </item>
        <item>
         <property name="text">
-         <string>KEGG</string>
+         <string>GENERIC DB</string>
         </property>
        </item>
       </widget>

@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMenu>
-// if qt5 #include <QtConcurrent>
+#include <QtConcurrent>
 
 #include "aboutdialog.h"
 #include "dymetdb.h"
