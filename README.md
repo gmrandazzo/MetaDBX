@@ -35,8 +35,8 @@ Install
 To install for all users on Unix/Linux/OSX/Windows:
 
 
- cmake .. -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt5/5.7.0/ 
- make
+cmake .. -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt5/5.7.0/ 
+make
 
 
 You need help? Support?
