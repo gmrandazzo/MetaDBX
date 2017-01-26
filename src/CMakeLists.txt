@@ -18,16 +18,20 @@ set(metasdfx_UIS metasdfx.ui aboutdialog.ui)
 #DynMetID
 set(dynmetid_SRC dymetdb.cpp
                  dynmetid.cpp
+                 progenesis_isotope_info.cpp
                  aboutdialog.cpp
                  main_dynmetid.cpp)
 
 set(dynmetid_H dymetdb.h
               dynmetid.h
+              progenesis_isotope_info.h
               aboutdialog.h)
 
 set(dynmetid_UIS dynmetid.ui aboutdialog.ui)
 
 set(testdynmetdb_SRC test_dymetdb.cpp dymetdb.cpp)
+
+set(testdynmetid_SRC testdynmetid.cpp progenesis_isotope_info.cpp)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -70,6 +74,9 @@ endif(WIN32)
 
 add_executable(testdynmetdb ${testdynmetdb_SRC})
 target_link_libraries(testdynmetdb m)
+
+add_executable(testdynmetid ${testdynmetid_SRC})
+target_link_libraries(testdynmetid ${QT5_LIBRARIES})
 
 target_link_libraries(metasdfx ${QT5_LIBRARIES})
 target_link_libraries(dynmetid ${QT5_LIBRARIES})
