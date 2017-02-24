@@ -257,7 +257,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
 
       double mserror = DaltonError(ms, ppm);
 
-      //std::cout << ms << " " << ppm << " " << mserror << " "<<  add << std::endl;
+      //std::cout << "Search for... " << ms << " " << ppm << " " << mserror << " "<<  add << std::endl;
       //second column is ms
       if(matches.size() == 0 && refine == false){ // search starting from MS
         for(int j = 0; j < (int)db[id]->collection.size(); j++){

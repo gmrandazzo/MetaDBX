@@ -222,7 +222,7 @@ void DynMetID::Identify_Worker()
       // this is a neutral mass!!
       // then remove also here the adduct
       v1[1].replace("n", "");
-      ms = v1[1].toDouble()+1.0079;
+      ms = v1[1].toDouble();
     }
     else{
       // is already charged
@@ -346,19 +346,35 @@ DynMetID::DynMetID(QWidget *parent)
   ui.tableView->setModel(tabmodel);
   ui.listView->setModel(lstmodel);
 
-  adducts.append(ADDUCT("M+H", 1.00782503207));
-  adducts.append(ADDUCT("M+2H", 2.01565006414));
-  adducts.append(ADDUCT("M+3H", 3.02347509621));
-  adducts.append(ADDUCT("M+H2O+H", 19.018389715771598));
-  adducts.append(ADDUCT("M+H-H2O", -17.0027396516316));
-  adducts.append(ADDUCT("M+H-2H2O", -35.013304335333196));
-  //adducts.append(ADDUCT("M+H-2H2O", -35.013304335333196));
-  adducts.append(ADDUCT("M+Na", 22.989769280929));
-  adducts.append(ADDUCT("M+Na+H", 23.997594312999));
-  adducts.append(ADDUCT("M+CH3OH+H", 33.0340397799116));
-  adducts.append(ADDUCT("M+CH3OH+Na", 55.0159840287706));
-  adducts.append(ADDUCT("M+ACN+H", 42.034374133140005));
-  adducts.append(ADDUCT("M+ACN+Na", 64.016318381999));
+  double e_mass = 0.0005485670779832; /*Da*/
+  /*Positive adducts*/
+  adducts.append(ADDUCT("M+", - e_mass));
+  adducts.append(ADDUCT("M+H", 1.00782503207 - e_mass));
+  adducts.append(ADDUCT("M+2H", 2.01565006414 - e_mass));
+  adducts.append(ADDUCT("M+3H", 3.02347509621 - e_mass));
+  adducts.append(ADDUCT("M+H2O+H", 19.018389715771598 - e_mass));
+  adducts.append(ADDUCT("M+H-H2O", -17.0027396516316 - e_mass));
+  adducts.append(ADDUCT("M+H-2H2O", -35.013304335333196 - e_mass));
+  adducts.append(ADDUCT("M+Na", 22.989769280929 - e_mass));
+  adducts.append(ADDUCT("M+Na+H", 23.997594312999 - e_mass));
+  adducts.append(ADDUCT("M+CH3OH+H", 33.0340397799116 - e_mass));
+  adducts.append(ADDUCT("M+CH3OH+Na", 55.0159840287706 - e_mass));
+  adducts.append(ADDUCT("M+ACN+H", 42.034374133140005 - e_mass));
+  adducts.append(ADDUCT("M+ACN+Na", 64.016318381999 - e_mass));
+
+  /*Negative adducts*/
+  adducts.append(ADDUCT("M-", -e_mass));
+  adducts.append(ADDUCT("M-H", -1.00782503207 + e_mass));
+  adducts.append(ADDUCT("M-2H", -2.01565006414 + e_mass));
+  adducts.append(ADDUCT("M-3H", -3.02347509621 + e_mass));
+  adducts.append(ADDUCT("M-H2O-H", -19.018389715771598 + e_mass));
+  adducts.append(ADDUCT("M-H-2H2O", -35.013304335333196 + e_mass));
+  adducts.append(ADDUCT("M-Na", -22.989769280929 + e_mass));
+  adducts.append(ADDUCT("M-Na-H", -23.997594312999 + e_mass));
+  adducts.append(ADDUCT("M-CH3OH-H", -33.0340397799116 + e_mass));
+  adducts.append(ADDUCT("M-CH3OH-Na", -55.0159840287706 + e_mass));
+  adducts.append(ADDUCT("M-ACN-H", -42.034374133140005 + e_mass));
+  adducts.append(ADDUCT("M-ACN-Na", 64.016318381999 + e_mass));
 
   QStringList lststdmass;
   for(int i = 0; i < adducts.size(); i++)
