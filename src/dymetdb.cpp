@@ -212,7 +212,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
   double perr = 0.f;
   double vm = 0.f;
   double vd = 0.f;
-  double flux = 0.f;
+  double flow = 0.f;
   double init_B = 0.f;
   double final_B = 0.f;
   double tg = 0.f;
@@ -287,7 +287,6 @@ std::vector<std::string> DyMetDB::find(std::string qline)
     }
     else if(q[i].compare("tR") == 0){
       int id = 2; //header logkw
-      /* find(MS 233.2844 within error 5ppm at tR: 10.25 error: 5% init: 5 final: 95 tg: 15 flux: 0.3 vm: 0.123 vd: 0.345); */
       tr = stod_(q[i+1]);
 
       if(i+1+15 > (int)q.size()){
@@ -311,8 +310,8 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         else if(q[j].compare("tg") == 0){
           tg = stod_(q[j+1]);
         }
-        else if(q[j].compare("flux") == 0){
-          flux = stod_(q[j+1]);
+        else if(q[j].compare("flow") == 0){
+          flow = stod_(q[j+1]);
         }
         else if(q[j].compare("vm") == 0){
           vm = stod_(q[j+1]);
@@ -325,13 +324,13 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         }
       }
 
-      //std::cout << "tr: " << tr << " err: " << perr << " vm: " << vm << " vd: " << vd << " flux: " << flux << " init: " << init_B << " final: " << final_B << " tg: " << tg << std::endl;
+      //std::cout << "tr: " << tr << " err: " << perr << " vm: " << vm << " vd: " << vd << " flow: " << flow << " init: " << init_B << " final: " << final_B << " tg: " << tg << std::endl;
       if(matches.size() == 0 && refine == false){ // search starting from tR
         for(int j = 0; j < (int)db[id]->collection.size(); j++){
           if(tr > -1 && perr > -1){
             double logkw = stod_(db[id]->collection[j]->key);
             double s = stod_(db[id+1]->collection[j]->key);
-            double tr_pred = rtpred(logkw, s, vm, vd, flux, init_B, final_B, tg);
+            double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
             if(std::fabs((tr - tr_pred)/tr)*100.f <= perr){
               matches.push_back(db[id]->collection[j]->value); // ?????
             }
@@ -353,7 +352,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
             std::vector<std::string> v = strsplit(lines[j], ';');
             double logkw = stod_(v[id]);
             double s = stod_(v[id+1]);
-            double tr_pred = rtpred(logkw, s, vm, vd, flux, init_B, final_B, tg);
+            double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
             if(std::fabs((tr - tr_pred)/tr)*100.f <= perr){
               j++;
               continue;
@@ -398,7 +397,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       if(init_B > 0 && final_B > 0 && tg > 0 && vm > 0 && vd > 0){ // rt calculation
         double logkw = stod_(v[2]);
         double s = stod_(v[3]);
-        double tr_pred = rtpred(logkw, s, vm, vd, flux, init_B, final_B, tg);
+        double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
         //std::cout << tr_pred << std::endl;
         if(ms > 0){
           ms_error = ((ms- (stod_(v[1])+add))*1e6)/ms;
@@ -458,7 +457,7 @@ void DyMetDB::setRTLinearAligner(std::string rttunfile, std::string qline)
       if(v.size() == 2){
         std::stringstream ss;
         ss << "Name " << v[0] << ";" << qline;
-        /* qline is of type: Name: HMDB00253; tR: -1 error: -1 init: 5 final: 95 tg: 14 flux: 0.3 vm: 0.3099 vd: 0.375 */
+        /* qline is of type: Name: HMDB00253; tR: -1 error: -1 init: 5 final: 95 tg: 14 flow: 0.3 vm: 0.3099 vd: 0.375 */
         std::vector<std::string> res = find(ss.str());
         if(res.size() == 1){
           //Name: HMDB01547;MS: 346.2144094;MS ERROR: nan;tR: -1%tR error: 1.12;FORMULA: C21H30O4;STATE: EXPERIMENTAL
@@ -502,10 +501,10 @@ void DyMetDB::setRTLinearAligner(std::string rttunfile, std::string qline)
 }
 
 double DyMetDB::rtpred(double logkw, double s,
-  double vm, double vd, double flux, double init_B, double final_B, double tg)
+  double vm, double vd, double flow, double init_B, double final_B, double tg)
 {
-  double t0 = vm/flux;
-  double td = vd/flux;
+  double t0 = vm/flow;
+  double td = vd/flow;
   double DeltaFi = final_B - init_B;
   double b = (t0 * DeltaFi * s) / tg;
   double k0 = pow(10, (logkw - s*(init_B)));

@@ -363,7 +363,7 @@ DynMetID::DynMetID(QWidget *parent)
   adducts.append(ADDUCT("M+ACN+Na", 64.016318381999 - e_mass));
 
   /*Negative adducts*/
-  adducts.append(ADDUCT("M-", -e_mass));
+  adducts.append(ADDUCT("M-", +e_mass));
   adducts.append(ADDUCT("M-H", -1.00782503207 + e_mass));
   adducts.append(ADDUCT("M-2H", -2.01565006414 + e_mass));
   adducts.append(ADDUCT("M-3H", -3.02347509621 + e_mass));

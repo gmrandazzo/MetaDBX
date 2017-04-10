@@ -1,6 +1,6 @@
 #include "genericreader.h"
 #include <QFile>
-#include <QBytearray>
+#include <QByteArray>
 #include <QTextStream>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

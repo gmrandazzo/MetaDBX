@@ -29,6 +29,8 @@ set(dynmetid_H dymetdb.h
 
 set(dynmetid_UIS dynmetid.ui aboutdialog.ui)
 
+set(dynmetidcmd_SRC dynmetidcmd.cpp dymetdb.cpp)
+
 set(testdynmetdb_SRC test_dymetdb.cpp dymetdb.cpp)
 
 set(testdynmetid_SRC testdynmetid.cpp progenesis_isotope_info.cpp)
@@ -63,7 +65,6 @@ if(WIN32)
   endif()
 endif()
 
-
 if(WIN32)
   add_executable(metasdfx ${metasdfx_SRC} ${metasdfx_MOC_H} ${metasdfx_UIS_H} ${icon_RCC_SRCS} ${METASDFX_WIN32_ICON_O})
   add_executable(dynmetid ${dynmetid_SRC} ${dynmetid_MOC_H} ${dynmetid_UIS_H} ${icon_RCC_SRCS} ${DYNMETID_WIN32_ICON_O})
@@ -71,6 +72,9 @@ else(WIN32)
   add_executable(metasdfx ${metasdfx_SRC} ${metasdfx_MOC_H} ${metasdfx_UIS_H} ${icon_RCC_SRCS})
   add_executable(dynmetid ${dynmetid_SRC} ${dynmetid_MOC_H} ${dynmetid_UIS_H} ${icon_RCC_SRCS})
 endif(WIN32)
+
+add_executable(dynmetidcmd ${dynmetidcmd_SRC})
+target_link_libraries(dynmetidcmd m)
 
 add_executable(testdynmetdb ${testdynmetdb_SRC})
 target_link_libraries(testdynmetdb m)
