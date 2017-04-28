@@ -278,9 +278,9 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       //second column is ms
       if(matches.size() == 0 && refine == false){ // search starting from MS
         for(int j = 0; j < (int)db[idMS]->collection.size(); j++){
-          //std::cout << stod_(db[1]->collection[j]->key) << " " << add << " " << stod_(db[1]->collection[j]->key) + add << " " << ms << std::endl;
+          //std::cout << stod_(db[idMS]->collection[j]->key) << " " << add << " " << stod_(db[idMS]->collection[j]->key) + add << " " << ms << std::endl;
           if(std::fabs((stod_(db[idMS]->collection[j]->key)+add) - ms) <= mserror){
-            //std::cout << stod_(db[idMS]->collection[j]->key) << " " << add << " " << stod_(db[1]->collection[j]->key) + add << " " << ms << " " << mserror << std::endl;
+            //std::cout << stod_(db[idMS]->collection[j]->key) << " " << add << " " << stod_(db[idMS]->collection[j]->key) + add << " " << ms << " " << mserror << std::endl;
             matches.push_back(db[idMS]->collection[j]->value);
           }
           else{
@@ -418,36 +418,51 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
         //std::cout << tr_pred << std::endl;
         if(ms > 0){
-          ms_error = ((ms- (stod_(v[1])+add))*1e6)/ms;
+          ms_error = ((ms- (stod_(v[idMS])+add))*1e6)/ms;
         }
 
         if(tr > 0){
           tr_error = (fabs(tr_pred-tr)/tr)*100;
         }
 
-        row += header[0]+": "+v[0]+";"; // name
-        row += header[1]+": "+NumberToString(v[1])+";"; // MS
+        row += header[idName]+": "+v[idName]+";"; // name
+        row += header[idMS]+": "+NumberToString(v[idMS])+";"; // MS
         row += "MS ERROR: "+NumberToString(pround(ms_error, 3))+";"; // MSERROR
         row += "tR: "+NumberToString(pround(tr_pred, 3))+";"; // Retention time predicted
         row += "%tR error: "+NumberToString(pround(tr_error, 3))+";"; // Retention time error
         // add other info!
-        if(4 < (int)v.size()){
-          for(int j = 4; j < (int)v.size()-1; j++){
+        for(int j = 0; j < header.size()-1; j++){
+          if(j != idName && j != idMS && j != idLogKw && j != idS){
             row += header[j]+": "+v[j]+";";
           }
+          else{
+            continue;
+          }
+        }
+
+        int j = header.size()-1;
+        if(j != idName && j != idMS && j != idLogKw && j != idS){
           row += header.back()+": "+v.back();
         }
       }
       else{
-        row += header[0]+": "+v[0]+";"; // name
-        row += header[1]+": "+NumberToString(v[1])+";"; // MS
-        ms_error = ((ms- (stod_(v[1])+add))*1e6)/ms;
+        row += header[idName]+": "+v[idName]+";"; // name
+        row += header[idMS]+": "+NumberToString(v[idMS])+";"; // MS
+        ms_error = ((ms- (stod_(v[idMS])+add))*1e6)/ms;
         row += "MS ERROR: "+NumberToString(pround(ms_error, 3))+";"; // MSERROR
+
         // add other info!
-        if(2 < (int)v.size()){
-          for(int j = 2; j < (int)v.size()-1; j++){
+        for(int j = 0; j < header.size()-1; j++){
+          if(j != idName && j != idMS && j != idLogKw && j != idS){
             row += header[j]+": "+v[j]+";";
           }
+          else{
+            continue;
+          }
+        }
+
+        int j = header.size()-1;
+        if(j != idName && j != idMS && j != idLogKw && j != idS){
           row += header.back()+": "+v.back();
         }
       }
