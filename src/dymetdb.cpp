@@ -85,7 +85,7 @@ void DyMetDB::clear()
 }
 
 int DyMetDB::getdbid(std::string name){
-  auto it = std::find(header.begin(), header.end(), name);
+  std::vector<std::string>::iterator it = std::find(header.begin(), header.end(), name);
   if (it == header.end()){
     // name not in vector
     return -1;
