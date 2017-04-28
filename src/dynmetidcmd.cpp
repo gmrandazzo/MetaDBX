@@ -11,6 +11,13 @@
 
 #include "dymetdb.h"
 
+// Datastructure for adducts
+struct ADDUCT{
+  ADDUCT(std::string name_, std::string ms_): name(name_), ms(atof(ms_.c_str())){}
+  std::string name;
+  double ms;
+};
+
 // Remove chars from a string
 void removeCharsFromString(std::string &str, std::string charsToRemove){
    for(int i = 0; i < charsToRemove.size(); ++i) {
@@ -73,20 +80,20 @@ inline std::string format(const char* fmt, ...){
 
 void PrintRes(std::vector<std::string> r)
 {
-  std::cout << "___________FOUND___________ " << std::endl;
+  //std::cout << "___________FOUND___________ " << std::endl;
   for(int i = 0; i < (int)r.size(); i++)
     std::cout << r[i] << std::endl;
-  std::cout << "___________________________ " << std::endl;
+  //std::cout << "___________________________ " << std::endl;
 }
 
 int main(int argc, char **argv)
 {
-  if(argc == 13){
+  if(argc == 12){
     /*Initialize the database*/
     DyMetDB *db = new DyMetDB;
     db->init(argv[11]);
 
-    std::vector<std::string> adductlst;
+    std::vector<ADDUCT> adductlst;
     std::vector<std::string> mslst;
     std::vector<std::string> trlst;
     std::string inpstr;
@@ -123,7 +130,11 @@ int main(int argc, char **argv)
 
     if(faddlst.is_open()){
       while(getline(faddlst, line)){
-        adductlst.push_back(trim(line));
+        std::vector<std::string> v = split(trim(line), ';');
+        if(v.size() == 2)
+          adductlst.push_back(ADDUCT(v[1], v[0]));
+        else
+          continue;
       }
       faddlst.close();
     }
@@ -131,27 +142,33 @@ int main(int argc, char **argv)
 
     // Now for each mass search each adduct by running the query.
     // The results were collected into an output file.
-    std::ofstream of;
-    of.open(argv[12]);
-
+    //std::ofstream of;
+    //of.open(argv[12]);
+    bool printfeat = true;
     for(int j = 0; j < mslst.size(); j++){
       for(int i = 0; i < adductlst.size(); i++){
         //inpstr = "MS: 347.2219 error: 25ppm add: 1.0079; tR: 9.05 error: 5% init: 5 final: 95 tg: 14 flow: 0.3 vm: 0.3099 vd: 0.375";
-        inpstr = format("MS: %s error: %sppm add: %s; tR: %s error: %s%% init: %s final: %s tg: %s flow: %s vm: %s vd: %s", mslst[j].c_str(), argv[2], adductlst[i].c_str(), trlst[j].c_str(), argv[4], argv[5], argv[6], argv[7], argv[8], argv[9], argv[10]);
+        inpstr = format("MS: %s error: %sppm add: %f; tR: %s error: %s%% init: %s final: %s tg: %s flow: %s vm: %s vd: %s", mslst[j].c_str(), argv[2], adductlst[i].ms, trlst[j].c_str(), argv[4], argv[5], argv[6], argv[7], argv[8], argv[9], argv[10]);
         //std::cout << "Searching for: " << inpstr << "\n" << std::endl;
         r = db->find(inpstr);
-        if(r.size()> 0){
+        if(r.size() > 0){
+          if(printfeat == true){
+            std::cout << "Feature: " << mslst[j] << " " << trlst[j] << std::endl;
+            printfeat = false;
+          }
+          std::cout << adductlst[i].name << " -> ";
           //std::cout << "Results:" << std::endl;
-          for(int k = 0; k < (int)r.size(); k++)
+          /*for(int k = 0; k < (int)r.size(); k++)
             of << mslst[i] << " and " << trlst[i] << " -> " << r[k] << std::endl;
-          of << "END" << std::endl;
+          of << "END" << std::endl;*/
           PrintRes(r);
         }
         r.clear();
       }
+      printfeat = true;
     }
     delete db;
-    of.close();
+    //of.close();
 
   }
   else{

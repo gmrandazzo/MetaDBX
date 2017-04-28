@@ -361,6 +361,7 @@ DynMetID::DynMetID(QWidget *parent)
   adducts.append(ADDUCT("M+CH3OH+Na", 55.0159840287706 - e_mass));
   adducts.append(ADDUCT("M+ACN+H", 42.034374133140005 - e_mass));
   adducts.append(ADDUCT("M+ACN+Na", 64.016318381999 - e_mass));
+  adducts.append(ADDUCT("M+NH4", 18.0343741331 - e_mass));
 
   /*Negative adducts*/
   adducts.append(ADDUCT("M-", +e_mass));
@@ -371,10 +372,12 @@ DynMetID::DynMetID(QWidget *parent)
   adducts.append(ADDUCT("M-H-2H2O", -35.013304335333196 + e_mass));
   adducts.append(ADDUCT("M-Na", -22.989769280929 + e_mass));
   adducts.append(ADDUCT("M-Na-H", -23.997594312999 + e_mass));
-  adducts.append(ADDUCT("M-CH3OH-H", -33.0340397799116 + e_mass));
-  adducts.append(ADDUCT("M-CH3OH-Na", -55.0159840287706 + e_mass));
-  adducts.append(ADDUCT("M-ACN-H", -42.034374133140005 + e_mass));
-  adducts.append(ADDUCT("M-ACN-Na", 64.016318381999 + e_mass));
+  adducts.append(ADDUCT("M+CH3OH-H", 31.01838971573 + e_mass));
+  adducts.append(ADDUCT("M+CH3OH-Na", 9.036445466870997 + e_mass));
+  adducts.append(ADDUCT("M+ACN-H", 40.018724069 + e_mass));
+  adducts.append(ADDUCT("M+ACN-Na", 18.036779820141003 + e_mass));
+  adducts.append(ADDUCT("M+HCOO", 44.9976542712 + e_mass));
+  adducts.append(ADDUCT("M+Cl", 34.9688526840 + e_mass));
 
   QStringList lststdmass;
   for(int i = 0; i < adducts.size(); i++)

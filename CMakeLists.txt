@@ -5,6 +5,7 @@ set(VERSION "1.0.0")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC OFF)
+set(CMAKE_CXX_STANDARD 11)
 
 #set(_components
 #    Core

@@ -28,6 +28,7 @@ inline bool isNumber(std::string str){
 }
 
 inline double stod_(std::string str){
+  std::replace(str.begin(), str.end(), ',', '.');
   return atof(str.c_str());
 }
 
@@ -91,7 +92,7 @@ public:
    * already identified compounds. The retention time thus will be corrected according these parameters.
    */
   void setRTLinearAligner(std::string rttunfile, std::string qline);
-  void setRTLinearAligner(double rtslope_, double rtintercept_) { rtslope = rtslope_; rtintercept = rtintercept_; } 
+  void setRTLinearAligner(double rtslope_, double rtintercept_) { rtslope = rtslope_; rtintercept = rtintercept_; }
   /* Check if the database is empty */
   bool isEmpty(){ if(db.size() == 0) return true; else return false; }
   /* Insert a new record in the database */
@@ -102,6 +103,8 @@ public:
   void remove(); // TO DEVELOP
   /* Delete everything in the database */
   void clear();
+  /* Search in the header the id of name in order to make the search */
+  int getdbid(std::string name);
 private:
   // private methods
   std::vector<std::string> strsplit(const std::string &s, char delim){

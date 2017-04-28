@@ -10,7 +10,7 @@
 
 int DyMetDB::init(std::string dbfile_)
 {
-  std::cout << "Start Indexing " << dbfile_ << std::endl;
+  //std::cout << "Start Indexing " << dbfile_ << std::endl;
   dbfile = dbfile_;
   std::string line;
   std::ifstream fdb(dbfile.c_str());
@@ -69,7 +69,7 @@ int DyMetDB::init(std::string dbfile_)
     }
   }*/
 
-  std::cout << "End Indexing" << std::endl;
+  //std::cout << "End Indexing" << std::endl;
   return 0;
 }
 
@@ -82,6 +82,17 @@ void DyMetDB::clear()
     delete db[i];
   }
   db.clear();
+}
+
+int DyMetDB::getdbid(std::string name){
+  auto it = std::find(header.begin(), header.end(), name);
+  if (it == header.end()){
+    // name not in vector
+    return -1;
+  }
+  else{
+    return std::distance(header.begin(), it);
+  }
 }
 
 std::vector<int> DyMetDB::find_all_keys_id(std::vector<key_value> dc, std::string key)
@@ -217,12 +228,17 @@ std::vector<std::string> DyMetDB::find(std::string qline)
   double final_B = 0.f;
   double tg = 0.f;
 
+  int idName = getdbid("Name");
+  int idMS = getdbid("MS");
+  int idLogKw = getdbid("LogKw");
+  int idS = getdbid("S");
   for(int i = 0; i < (int)q.size(); i+=2){
     if(q[i].compare("Name") == 0){
-      int id = 0; // header
-      for(int j = 0; j < (int)db[id]->collection.size(); j++){
-        if(db[0]->collection[j]->key.compare(q[i+1]) == 0){
-          matches.push_back(db[id]->collection[j]->value);
+      //int id = 0; // header
+      //int idName = getdbid("Name");
+      for(int j = 0; j < (int)db[idName]->collection.size(); j++){
+        if(db[idName]->collection[j]->key.compare(q[i+1]) == 0){
+          matches.push_back(db[idName]->collection[j]->value);
         }
         else{
           continue;
@@ -235,7 +251,8 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       refine = true;
     }
     else if(q[i].compare("MS") == 0){
-      int id = 1; //header
+      //int id = 1; //header
+      //int idMS = getdbid("MS");
       ms = stod_(q[i+1]);
       double ppm = 0.f;
       int sz = 0;
@@ -260,11 +277,11 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       //std::cout << "Search for... " << ms << " " << ppm << " " << mserror << " "<<  add << std::endl;
       //second column is ms
       if(matches.size() == 0 && refine == false){ // search starting from MS
-        for(int j = 0; j < (int)db[id]->collection.size(); j++){
+        for(int j = 0; j < (int)db[idMS]->collection.size(); j++){
           //std::cout << stod_(db[1]->collection[j]->key) << " " << add << " " << stod_(db[1]->collection[j]->key) + add << " " << ms << std::endl;
-          if(std::fabs((stod_(db[id]->collection[j]->key)+add) - ms) <= mserror){
-            //std::cout << stod_(db[id]->collection[j]->key) << " " << add << " " << stod_(db[1]->collection[j]->key) + add << " " << ms << " " << mserror << std::endl;
-            matches.push_back(db[id]->collection[j]->value);
+          if(std::fabs((stod_(db[idMS]->collection[j]->key)+add) - ms) <= mserror){
+            //std::cout << stod_(db[idMS]->collection[j]->key) << " " << add << " " << stod_(db[1]->collection[j]->key) + add << " " << ms << " " << mserror << std::endl;
+            matches.push_back(db[idMS]->collection[j]->value);
           }
           else{
             continue;
@@ -275,7 +292,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         std::vector<std::string> lines = getqline(matches);
         for(int j = 0; j < (int)lines.size(); j++){
           std::vector<std::string> v = strsplit(lines[j], ';');
-          if(std::fabs(stod_(v[id]) - ms) <= mserror){
+          if(std::fabs(stod_(v[idMS]) - ms) <= mserror){
             continue;
           }
           else{
@@ -286,7 +303,8 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       refine = true;
     }
     else if(q[i].compare("tR") == 0){
-      int id = 2; //header logkw
+      //int idLogKw = getdbid("LogKw");
+      //int idS = getdbid("S");
       tr = stod_(q[i+1]);
 
       if(i+1+15 > (int)q.size()){
@@ -324,15 +342,15 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         }
       }
 
-      //std::cout << "tr: " << tr << " err: " << perr << " vm: " << vm << " vd: " << vd << " flow: " << flow << " init: " << init_B << " final: " << final_B << " tg: " << tg << std::endl;
+    //  std::cout << "tr: " << tr << " err: " << perr << " vm: " << vm << " vd: " << vd << " flow: " << flow << " init: " << init_B << " final: " << final_B << " tg: " << tg << std::endl;
       if(matches.size() == 0 && refine == false){ // search starting from tR
-        for(int j = 0; j < (int)db[id]->collection.size(); j++){
+        for(int j = 0; j < (int)db[idLogKw]->collection.size(); j++){
           if(tr > -1 && perr > -1){
-            double logkw = stod_(db[id]->collection[j]->key);
-            double s = stod_(db[id+1]->collection[j]->key);
+            double logkw = stod_(db[idLogKw]->collection[j]->key);
+            double s = stod_(db[idS]->collection[j]->key);
             double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
             if(std::fabs((tr - tr_pred)/tr)*100.f <= perr){
-              matches.push_back(db[id]->collection[j]->value); // ?????
+              matches.push_back(db[idLogKw]->collection[j]->value); // ?????
             }
             else{
               continue;
@@ -340,7 +358,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
           }
           else{
             // no retention error comparisson needed
-            matches.push_back(db[id]->collection[j]->value);
+            matches.push_back(db[idLogKw]->collection[j]->value);
           }
         }
       }
@@ -350,8 +368,8 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         while(j != (int)lines.size()){
           if(tr > -1 && perr > -1){
             std::vector<std::string> v = strsplit(lines[j], ';');
-            double logkw = stod_(v[id]);
-            double s = stod_(v[id+1]);
+            double logkw = stod_(v[idLogKw]);
+            double s = stod_(v[idS]);
             double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
             if(std::fabs((tr - tr_pred)/tr)*100.f <= perr){
               j++;
