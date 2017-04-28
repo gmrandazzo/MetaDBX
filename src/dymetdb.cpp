@@ -85,6 +85,7 @@ void DyMetDB::clear()
 }
 
 int DyMetDB::getdbid(std::string name){
+  //auto it = std::find(header.begin(), header.end(), name);
   std::vector<std::string>::iterator it = std::find(header.begin(), header.end(), name);
   if (it == header.end()){
     // name not in vector
@@ -413,8 +414,9 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       //ms calculation & rt calculation
       //std::cout << tr << " " << vm << " " << vd << std::endl;
       if(init_B > 0 && final_B > 0 && tg > 0 && vm > 0 && vd > 0){ // rt calculation
-        double logkw = stod_(v[2]);
-        double s = stod_(v[3]);
+        double logkw = stod_(v[idLogKw]);
+        double s = stod_(v[idS]);
+        //std::cout << logkw << " " << s << std::endl;
         double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
         //std::cout << tr_pred << std::endl;
         if(ms > 0){
