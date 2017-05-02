@@ -78,11 +78,11 @@ inline std::string format(const char* fmt, ...){
     return ret;
 }
 
-void PrintRes(std::vector<std::string> r)
+void PrintRes(std::string adductname, std::vector<std::string> r)
 {
   //std::cout << "___________FOUND___________ " << std::endl;
   for(int i = 0; i < (int)r.size(); i++)
-    std::cout << r[i] << std::endl;
+    std::cout << adductname << " ; " << r[i] << std::endl;
   //std::cout << "___________________________ " << std::endl;
 }
 
@@ -153,15 +153,14 @@ int main(int argc, char **argv)
         r = db->find(inpstr);
         if(r.size() > 0){
           if(printfeat == true){
-            std::cout << "Feature: " << mslst[j] << " " << trlst[j] << std::endl;
+            std::cout << "Feature: " << mslst[j] << " m/t " << trlst[j] << " min"<< std::endl;
             printfeat = false;
           }
-          std::cout << adductlst[i].name << " -> ";
           //std::cout << "Results:" << std::endl;
           /*for(int k = 0; k < (int)r.size(); k++)
             of << mslst[i] << " and " << trlst[i] << " -> " << r[k] << std::endl;
           of << "END" << std::endl;*/
-          PrintRes(r);
+          PrintRes( adductlst[i].name, r);
         }
         r.clear();
       }
