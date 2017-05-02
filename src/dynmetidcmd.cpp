@@ -153,7 +153,7 @@ int main(int argc, char **argv)
         r = db->find(inpstr);
         if(r.size() > 0){
           if(printfeat == true){
-            std::cout << "Feature: " << mslst[j] << " m/t " << trlst[j] << " min"<< std::endl;
+            std::cout << "Feature: " << mslst[j] << " m/z " << trlst[j] << " min"<< std::endl;
             printfeat = false;
           }
           //std::cout << "Results:" << std::endl;
