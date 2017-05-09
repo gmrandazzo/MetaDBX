@@ -78,11 +78,11 @@ inline std::string format(const char* fmt, ...){
     return ret;
 }
 
-void PrintRes(std::string featurename, std::string adductname, std::vector<std::string> r)
+void PrintRes(std::string adductname, std::vector<std::string> r)
 {
   //std::cout << "___________FOUND___________ " << std::endl;
   for(int i = 0; i < (int)r.size(); i++)
-    std::cout << "Feature: " << featurename << "; Adduct: " << adductname << ";" << r[i] << std::endl;
+    std::cout << "Adduct: " << adductname << ";" << r[i] << std::endl;
   //std::cout << "___________________________ " << std::endl;
 }
 
@@ -144,6 +144,7 @@ int main(int argc, char **argv)
     // The results were collected into an output file.
     //std::ofstream of;
     //of.open(argv[12]);
+    bool printfeat = true;
     for(int j = 0; j < mslst.size(); j++){
       for(int i = 0; i < adductlst.size(); i++){
         //inpstr = "MS: 347.2219 error: 25ppm add: 1.0079; tR: 9.05 error: 5% init: 5 final: 95 tg: 14 flow: 0.3 vm: 0.3099 vd: 0.375";
@@ -151,14 +152,19 @@ int main(int argc, char **argv)
         //std::cout << "Searching for: " << inpstr << "\n" << std::endl;
         r = db->find(inpstr);
         if(r.size() > 0){
+          if(printfeat == true){
+            std::cout << "Feature:  " << trim(mslst[j]) << " m/z " << trim(trlst[j]) << " min"<< std::endl;
+            printfeat = false;
+          }
           //std::cout << "Results:" << std::endl;
           /*for(int k = 0; k < (int)r.size(); k++)
             of << mslst[i] << " and " << trlst[i] << " -> " << r[k] << std::endl;
           of << "END" << std::endl;*/
-          PrintRes(trim(mslst[j])+" m/z "+trim(trlst[j])+" min",adductlst[i].name, r);
+          PrintRes(adductlst[i].name, r);
         }
         r.clear();
       }
+      printfeat = true;
     }
     delete db;
     //of.close();
