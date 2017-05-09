@@ -159,7 +159,6 @@ int main(int argc, char **argv)
         }
         r.clear();
       }
-      printfeat = true;
     }
     delete db;
     //of.close();
