@@ -88,11 +88,14 @@ void PrintRes(std::string adductname, std::vector<std::string> r)
 
 int main(int argc, char **argv)
 {
-  if(argc == 12){
+  if(argc >= 12){
     /*Initialize the database*/
     DyMetDB *db = new DyMetDB;
     db->init(argv[11]);
 
+    if(argc == 14){
+      db->setRTLinearAligner(std::stof(argv[12]), std::stof(argv[13]));
+    }
     std::vector<ADDUCT> adductlst;
     std::vector<std::string> mslst;
     std::vector<std::string> trlst;

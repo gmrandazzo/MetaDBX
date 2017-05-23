@@ -232,8 +232,10 @@ std::vector<std::string> DyMetDB::find(std::string qline)
 
   int idName = getdbid("Name");
   int idMS = getdbid("MS");
+  int idMSSpec = getdbid("Formula");
   int idLogKw = getdbid("LogKw");
   int idS = getdbid("S");
+
   for(int i = 0; i < (int)q.size(); i+=2){
     if(q[i].compare("Name") == 0){
       //int id = 0; // header
@@ -303,6 +305,27 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         }
       }
       refine = true;
+    }
+    else if(q[i].compare("MSSpectra") == 0){
+      //Example MSSpectre: 49.800:39604.0, 56.700:19802.0, 98.200:29703.0, 128.800:1514853.0, 147.100:57420849.5;
+      std::vector<std::string> ip = strsplit(q[i+1], ',');
+      if(matches.size() == 0 && refine == false){ // search starting from tR
+        for(int k = 0; k < ip.size(); k++){
+          std::cout << ip[i] << std::endl;
+        }
+
+        for(int j = 0; j < (int)db[idMSSpec]->collection.size(); j++){
+          continue;
+          //strsplit(lines);
+        }
+        refine = true;
+      }
+      else{
+
+      }
+    }
+    else if(q[i].compare("MSMSSpectre") == 0){
+
     }
     else if(q[i].compare("tR") == 0){
       //int idLogKw = getdbid("LogKw");
@@ -507,6 +530,7 @@ void DyMetDB::setRTLinearAligner(std::string rttunfile, std::string qline)
         }
       }
     }
+
     std::vector<std::string> q = parseqline(qline);
 
     /*Calculate rtslope and rtintercept by linear regression.
