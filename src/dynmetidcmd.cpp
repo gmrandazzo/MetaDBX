@@ -36,7 +36,6 @@ void split(const std::string &s, char delim, Out result) {
     }
 }
 
-
 std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> elems;
     split(s, delim, std::back_inserter(elems));
@@ -99,6 +98,7 @@ int main(int argc, char **argv)
     std::vector<ADDUCT> adductlst;
     std::vector<std::string> mslst;
     std::vector<std::string> trlst;
+    std::vector<std::string> orig_featname;
     std::string inpstr;
     std::vector<std::string> r;
 
@@ -112,6 +112,7 @@ int main(int argc, char **argv)
           trlst.push_back(v[0]);
           removeCharsFromString(v[1], "m/zn");
           mslst.push_back(v[1]);
+          orig_featname.push_back(trim(line));
         }
         else{
           v = split(line, '@'); // Mass hunter support
@@ -156,7 +157,7 @@ int main(int argc, char **argv)
         r = db->find(inpstr);
         if(r.size() > 0){
           if(printfeat == true){
-            std::cout << "Feature: " << trim(mslst[j]) << " m/z " << trim(trlst[j]) << " min"<< std::endl;
+            std::cout << "Feature: " << trim(mslst[j]) << " m/z " << trim(trlst[j]) << " min" << " " << orig_featname[j] << std::endl;
             printfeat = false;
           }
           //std::cout << "Results:" << std::endl;
