@@ -257,6 +257,12 @@ std::vector<std::string> DyMetDB::find(std::string qline)
     else if(q[i].compare("MS") == 0){
       //int id = 1; //header
       //int idMS = getdbid("MS");
+      if(q[i+1].find("m/z") != std::string::npos)
+        q[i+1].erase(std::remove(q[i+1].begin(), q[i+1].end(), 'm/z'), q[i+1].end());
+      else if(q[i+1].find("n") != std::string::npos)
+        q[i+1].erase(std::remove(q[i+1].begin(), q[i+1].end(), 'n'), q[i+1].end());
+
+      //std::cout << "MS converted: " << q[i+1] << std::endl;
       ms = stod_(q[i+1]);
       double ppm = 0.f;
       int sz = 0;
@@ -306,6 +312,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
       }
       refine = true;
     }
+    /*
     else if(q[i].compare("MSSpectra") == 0){
       //Example MSSpectre: 49.800:39604.0, 56.700:19802.0, 98.200:29703.0, 128.800:1514853.0, 147.100:57420849.5;
       std::vector<std::string> ip = strsplit(q[i+1], ',');
@@ -326,7 +333,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
     }
     else if(q[i].compare("MSMSSpectre") == 0){
 
-    }
+    }*/
     else if(q[i].compare("tR") == 0){
       //int idLogKw = getdbid("LogKw");
       //int idS = getdbid("S");
@@ -354,6 +361,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
           tg = stod_(q[j+1]);
         }
         else if(q[j].compare("flow") == 0){
+          //std::cout << q[j] << " " << q[j+1] << std::endl;
           flow = stod_(q[j+1]);
         }
         else if(q[j].compare("vm") == 0){
@@ -367,7 +375,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         }
       }
 
-    //  std::cout << "tr: " << tr << " err: " << perr << " vm: " << vm << " vd: " << vd << " flow: " << flow << " init: " << init_B << " final: " << final_B << " tg: " << tg << std::endl;
+      //std::cout << "tr: " << tr << " err: " << perr << " vm: " << vm << " vd: " << vd << " flow: " << flow << " init: " << init_B << " final: " << final_B << " tg: " << tg << std::endl;
       if(matches.size() == 0 && refine == false){ // search starting from tR
         for(int j = 0; j < (int)db[idLogKw]->collection.size(); j++){
           if(tr > -1 && perr > -1){
@@ -375,7 +383,7 @@ std::vector<std::string> DyMetDB::find(std::string qline)
             double s = stod_(db[idS]->collection[j]->key);
             double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
             if(std::fabs((tr - tr_pred)/tr)*100.f <= perr){
-              matches.push_back(db[idLogKw]->collection[j]->value); // ?????
+              matches.push_back(db[idLogKw]->collection[j]->value);
             }
             else{
               continue;
@@ -432,10 +440,11 @@ std::vector<std::string> DyMetDB::find(std::string qline)
     std::vector<mapres> tmprow;
     for(int i = 0; i < (int)lines.size(); i++){
       std::vector<std::string> v = strsplit(lines[i], ';');
-      std::string row;
+      //std::string row;
+      std::stringstream row;
       double ms_error = 0.f;
       double tr_error = 0.f;
-      //ms calculation & rt calculation
+      //std::cout << "ms calculation & rt calculation" << std::endl;
       //std::cout << tr << " " << vm << " " << vd << std::endl;
       if(init_B > 0 && final_B > 0 && tg > 0 && vm > 0 && vd > 0){ // rt calculation
         double logkw = stod_(v[idLogKw]);
@@ -444,22 +453,26 @@ std::vector<std::string> DyMetDB::find(std::string qline)
         double tr_pred = rtpred(logkw, s, vm, vd, flow, init_B, final_B, tg);
         //std::cout << tr_pred << std::endl;
         if(ms > 0){
-          ms_error = ((ms- (stod_(v[idMS])+add))*1e6)/ms;
+          // ppm error = (mass_observed - mass_calcuated) / mass_calcualted * 1e6
+          double mass_calcuated = stod_(v[idMS])+add;
+          //std::cout << ms << " " << v[idMS] << " " << add << " " << mass_calcuated << std::endl;
+          ms_error = ((ms - mass_calcuated)/mass_calcuated)*1e6;
         }
 
         if(tr > 0){
           tr_error = (fabs(tr_pred-tr)/tr)*100;
         }
 
-        row += header[idName]+": "+v[idName]+";"; // name
-        row += header[idMS]+": "+NumberToString(v[idMS])+";"; // MS
-        row += "MS ERROR: "+NumberToString(pround(ms_error, 3))+";"; // MSERROR
-        row += "tR: "+NumberToString(pround(tr_pred, 3))+";"; // Retention time predicted
-        row += "%tR error: "+NumberToString(pround(tr_error, 3))+";"; // Retention time error
+        row << header[idName] << ": "<< v[idName] << ";"; // name
+        row << header[idMS] << ": " << NumberToString(v[idMS]) << ";"; // MS
+        row << "MS ERROR: " << NumberToString(pround(ms_error, 3)) << ";"; // MSERROR
+        row << "tR: " << NumberToString(pround(tr_pred, 3)) << ";"; // Retention time predicted
+        row << "%tR error: " << NumberToString(pround(tr_error, 3)) << ";"; // Retention time error
+
         // add other info!
         for(int j = 0; j < header.size()-1; j++){
           if(j != idName && j != idMS && j != idLogKw && j != idS){
-            row += header[j]+": "+v[j]+";";
+            row << header[j] << ": " << v[j] << ";";
           }
           else{
             continue;
@@ -468,19 +481,22 @@ std::vector<std::string> DyMetDB::find(std::string qline)
 
         int j = header.size()-1;
         if(j != idName && j != idMS && j != idLogKw && j != idS){
-          row += header.back()+": "+v.back();
+          row << header.back() << ": "+v.back();
         }
       }
       else{
-        row += header[idName]+": "+v[idName]+";"; // name
-        row += header[idMS]+": "+NumberToString(v[idMS])+";"; // MS
-        ms_error = ((ms- (stod_(v[idMS])+add))*1e6)/ms;
-        row += "MS ERROR: "+NumberToString(pround(ms_error, 3))+";"; // MSERROR
+        row << header[idName] << ": " << v[idName] << ";"; // name
+        row << header[idMS] << ": " << NumberToString(v[idMS]) << ";"; // MS
+
+        double mass_calcuated = stod_(v[idMS])+add;
+        ms_error = ((ms - mass_calcuated)/mass_calcuated)*1e6;
+
+        row << "MS ERROR: " << NumberToString(pround(ms_error, 3)) << ";"; // MSERROR
 
         // add other info!
         for(int j = 0; j < header.size()-1; j++){
           if(j != idName && j != idMS && j != idLogKw && j != idS){
-            row += header[j]+": "+v[j]+";";
+            row << header[j] << ": " << v[j] << ";";
           }
           else{
             continue;
@@ -489,10 +505,10 @@ std::vector<std::string> DyMetDB::find(std::string qline)
 
         int j = header.size()-1;
         if(j != idName && j != idMS && j != idLogKw && j != idS){
-          row += header.back()+": "+v.back();
+          row << header.back() << ": " << v.back();
         }
       }
-      tmprow.push_back(mapres(ms_error, tr_error, row));
+      tmprow.push_back(mapres(ms_error, tr_error, row.str()));
     }
     std::sort(tmprow.begin(), tmprow.end());
     for(int i = 0; i < tmprow.size(); i++)

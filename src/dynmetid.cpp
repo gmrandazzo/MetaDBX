@@ -223,6 +223,7 @@ void DynMetID::Identify_Worker()
       // then remove also here the adduct
       v1[1].replace("n", "");
       ms = v1[1].toDouble();
+      //qDebug() << "Neutral Mass: " << v1 << " Converted: " << ms;
     }
     else{
       // is already charged
@@ -239,7 +240,8 @@ void DynMetID::Identify_Worker()
       for(int k = 0; k < ext_adducts.size(); k++){
         std::vector<std::string> r;
         if(ui.rtBox->isChecked()){
-          r = db->find(QString("MS %1 error %2 add %3; tR: %4 error: %5 init: %6 final: %7 tg: %8 flux: %9 vm: %10 vd: %11").arg(ms).arg(mserror).arg(ext_adducts[k].mass).arg(tr).arg(tr_err).arg(init_B).arg(final_B).arg(tg).arg(flux).arg(vm).arg(vd).toStdString());
+          //qDebug() <<  QString("MS %1 error %2 add %3; tR: %4 error: %5 init: %6 final: %7 tg: %8 flux: %9 vm: %10 vd: %11").arg(ms).arg(mserror).arg(ext_adducts[k].mass).arg(tr).arg(tr_err).arg(init_B).arg(final_B).arg(tg).arg(flux).arg(vm).arg(vd);
+          r = db->find(QString("MS %1 error %2 add %3; tR: %4 error: %5 init: %6 final: %7 tg: %8 flow: %9 vm: %10 vd: %11").arg(QString::number(ms, 'f', 4)).arg(mserror).arg(ext_adducts[k].mass).arg(QString::number(tr, 'f', 2)).arg(tr_err).arg(init_B).arg(final_B).arg(tg).arg(flux).arg(vm).arg(vd).toStdString());
         }
         else{
           r = db->find(QString("MS %1 error %2 add %3").arg(ms).arg(mserror).arg(ext_adducts[k].mass).toStdString());

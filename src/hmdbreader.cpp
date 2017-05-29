@@ -3,6 +3,7 @@
 
 bool HMDBReader::readFile(const QString &fileName)
 {
+  qDebug() << fileName;
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text)){
     //qDebug() << "Error: Cannot read file " << fileName << qPrintable(file.errorString());

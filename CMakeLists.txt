@@ -43,10 +43,10 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" cmake_build_type_tolower)
 
 if(cmake_build_type_tolower STREQUAL "debug")
   set(CMAKE_BUILD_TYPE "Debug")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -pedantic -g")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -Wall -pedantic -g")
 else()
   set(CMAKE_BUILD_TYPE "Release")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall")
 endif()
 
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
